@@ -1,0 +1,67 @@
+[package]
+name = "wgpu_demo"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[example]]
+name = "window"
+
+[dependencies]
+
+## ======== PI 运行时 ========
+
+pi_async = "0.4"
+pi_assets = "0.7"
+pi_share = "0.2"
+pi_hash = "0.1"
+
+## ======== 窗口 && 渲染 ========
+
+wgpu = { version = "0.13", features = ["glsl"] }
+naga = { version = "0.9", features = ["glsl-in", "wgsl-out"] }
+
+#### 这两个库 要和 wgpu版本对应上
+winit = "0.26"
+raw-window-handle = "0.4.3"
+
+## ======== 数学 ========
+
+approx = "0.5"
+nalgebra = "0.31"
+
+## ======== 杂项 ========
+
+futures = "0.3"
+
+log = "0.4"
+env_logger = "0.9"
+
+lazy_static = "1.4"
+
+## ======== Windows ========
+
+[target.'cfg(windows)'.dependencies]
+winapi = "0.3"
+
+## ======== Android ========
+
+[target.'cfg(target_os = "android")'.dev-dependencies]
+jni = "0.19"
+libc = "0.2"
+
+ndk = "0.7"
+ndk-glue = {version = "0.7", features = ["logger"] }
+
+[package.metadata.android.sdk]
+#### Android 7.0
+min_sdk_version = 24
+target_sdk_version = 29
+
+[package.metadata.android]
+package = "com.wgpu.demo"
+
+[package.metadata.android.signing.release]
+path = "example.keystore"
+keystore_password = "123456"
