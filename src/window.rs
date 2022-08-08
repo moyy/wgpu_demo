@@ -6,7 +6,7 @@
 //!
 //!
 
-use crate::app::App;
+use crate::app;
 use std::sync::Arc;
 use winit::{
     event::{self, WindowEvent},
@@ -35,10 +35,10 @@ pub(crate) fn run_window_loop(window: Arc<winit::window::Window>, event_loop: Ev
 
         match event {
             event::Event::Suspended => {
-                App::spawn_pause();
+                app::spawn_pause();
             }
             event::Event::Resumed => {
-                App::spawn_resume();
+                app::spawn_resume();
             }
             event::Event::RedrawEventsCleared => {
                 window.request_redraw();
@@ -52,7 +52,7 @@ pub(crate) fn run_window_loop(window: Arc<winit::window::Window>, event_loop: Ev
                     },
                 ..
             } => {
-                App::spawn_resize(size.width, size.height);
+                app::spawn_resize(size.width, size.height);
             }
             event::Event::WindowEvent { event, .. } => match event {
                 WindowEvent::KeyboardInput {
@@ -76,7 +76,7 @@ pub(crate) fn run_window_loop(window: Arc<winit::window::Window>, event_loop: Ev
                         },
                     ..
                 } => {
-                    App::spawn_exit();
+                    app::spawn_exit();
                 }
                 _ => {}
             },

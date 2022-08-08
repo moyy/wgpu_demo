@@ -1,6 +1,8 @@
-use std::sync::Arc;
+use std::{sync::Arc, thread, time::Duration};
 
-use pi_async::rt::{worker_thread::WorkerRuntime, AsyncRuntimeBuilder};
+use pi_async::rt::{worker_thread::WorkerRuntime, AsyncRuntime, AsyncRuntimeBuilder};
+
+use crate::app;
 
 lazy_static! {
     // 渲染运行时：录制 渲染 指令 + raf 调度
@@ -9,23 +11,33 @@ lazy_static! {
 
 static mut RENDER_CONTEXT: Option<RenderContext> = None;
 
-// 渲染环境，封装
-pub(crate) struct RenderContext {
-
+// ============= 公共方法
+pub fn render_frame() {
+    let _ = RENDER_RUNTIME.spawn(RENDER_RUNTIME.alloc(), async move {
+        // TODO 之后 改成 presentation...get_current_texture
+        thread::sleep(Duration::from_micros(1));
+        app::spawn_animation_frame();
+    });
 }
 
+// ============= crate 公共方法
+
+pub(crate) fn init_render(window: Arc<winit::window::Window>) {
+    let _ = RENDER_RUNTIME.spawn(RENDER_RUNTIME.alloc(), async move {
+        let render_context = RenderContext {};
+
+        // TODO
+
+        unsafe {
+            RENDER_CONTEXT.replace(render_context);
+        }
+    });
+}
+
+// 渲染环境，封装
+struct RenderContext {}
+
 impl RenderContext {
-    // 初始化
-    pub(crate) async fn init(window: Arc<winit::window::Window>) {
-        log::info!("RenderContext::init");
-    }
+    pub(crate) async fn set_pause(&self, is_pause: bool) {}
 
-    pub(crate) async fn set_pause(&self, is_pause: bool) {
-
-    }
-
-    // 由 app 的 raf 触发
-    pub(crate) async fn handle_render(&self) {
-
-    }
 }

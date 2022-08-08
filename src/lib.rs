@@ -14,8 +14,7 @@ extern crate lazy_static;
 
 pub mod app;
 pub mod asset;
-
-mod render;
+pub mod render;
 mod window;
 
 use std::sync::Arc;
@@ -38,8 +37,13 @@ pub fn framework_main(log_level: &str, app_main_fn: BoxFuture<'static, ()>) {
     let (window, event_loop) = window::create_window("Example");
     let window = Arc::new(window);
 
-    // 初始化 app    
+    // 初始化 app
     app::App::init(window.clone(), app_main_fn);
+
+    // 初始化 渲染
+    // andoroid 的 实现，需要 在 窗口 Resume事件 中
+    #[cfg(target_os = "windows")]
+    render::init_render(window.clone());
 
     // 主线程 线程循环
     // 直到 event_loop 关闭 才会 退出

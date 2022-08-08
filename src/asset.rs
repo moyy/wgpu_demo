@@ -1,4 +1,4 @@
-use pi_async::rt::{AsyncRuntimeBuilder, worker_thread::WorkerRuntime, local_async_runtime};
+use pi_async::rt::{AsyncRuntimeBuilder, worker_thread::WorkerRuntime};
 
 lazy_static! {
     // 渲染资源 运行时，负责 创建 渲染 资源
